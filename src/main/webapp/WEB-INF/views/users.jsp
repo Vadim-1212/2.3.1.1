@@ -1,5 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <html>
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,6 @@
 <body>
 <h2>All Users</h2>
 
-<!-- Таблица пользователей -->
 <table border="1" cellpadding="5">
     <tr>
         <th>ID</th>
@@ -22,7 +22,8 @@
             <td>${u.name}</td>
             <td>${u.age}</td>
             <td>
-                <a href="${pageContext.request.contextPath}/users/delete/${u.id}">Delete</a>
+                <c:url var="delUrl" value="/users/delete/${u.id}"/>
+                <a href="${delUrl}" onclick="return confirm('Delete user #${u.id}?');">Delete</a>
             </td>
         </tr>
     </c:forEach>
@@ -30,9 +31,9 @@
 
 <hr/>
 
-<!-- Форма добавления -->
 <h2>Add User</h2>
-<form:form method="post" modelAttribute="user" action="${pageContext.request.contextPath}/users">
+<c:url var="addUrl" value="/users"/>
+<form:form method="post" modelAttribute="user" action="${addUrl}">
     Name: <form:input path="name"/><br/>
     Age: <form:input path="age"/><br/>
     <input type="submit" value="Add"/>

@@ -2,18 +2,15 @@ package tasks.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tasks.model.User;
 import tasks.service.UserService;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -24,29 +21,29 @@ public class UserController {
         return "OK";
     }
 
-
-    // показать всех
+    // список
     @GetMapping
     public String listUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("user", new User()); // пустой объект для формы
-        return "users"; // откроется users.jsp
+        model.addAttribute("user", new User()); // для формы добавления
+        return "users"; // /WEB-INF/views/users.jsp
     }
 
-    // добавить нового
+    // добавление
     @PostMapping
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
-        return "redirect:/users"; // перезагружаем список
+        return "redirect:/users";
     }
 
+    // удаление (path-variable)
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUserById(id);
-        return "redirect:/users"; // обновляем список
+        return "redirect:/users";
     }
 
-    // обновить
+    // обновление (если нужно)
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user) {
         userService.updateUser(user);
